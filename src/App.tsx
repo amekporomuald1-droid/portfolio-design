@@ -4,9 +4,11 @@ import CustomCursor from "@/components/cursor/CustomCursor";
 
 const Home = lazy(() => import("@/pages/Home"));
 const ProjectDetail = lazy(() => import("@/pages/ProjectDetail"));
-const DesignSystem = lazy(() => import("@/pages/DesignSystem"));
-const StickerTest = lazy(() => import("@/pages/StickerTest"));
-const CursorTest = lazy(() => import("@/pages/CursorTest"));
+
+// Pages de test : disponibles uniquement avec `npm run dev`, absentes du build de production.
+const DesignSystem = import.meta.env.DEV ? lazy(() => import("@/pages/DesignSystem")) : null;
+const StickerTest = import.meta.env.DEV ? lazy(() => import("@/pages/StickerTest")) : null;
+const CursorTest = import.meta.env.DEV ? lazy(() => import("@/pages/CursorTest")) : null;
 
 export default function App() {
   return (
@@ -16,9 +18,9 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/projets/:slug" element={<ProjectDetail />} />
-          <Route path="/design" element={<DesignSystem />} />
-          <Route path="/sticker-test" element={<StickerTest />} />
-          <Route path="/cursor-test" element={<CursorTest />} />
+          {DesignSystem && <Route path="/design" element={<DesignSystem />} />}
+          {StickerTest && <Route path="/sticker-test" element={<StickerTest />} />}
+          {CursorTest && <Route path="/cursor-test" element={<CursorTest />} />}
         </Routes>
       </Suspense>
     </>
