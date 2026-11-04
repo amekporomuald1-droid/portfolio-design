@@ -60,3 +60,126 @@
 .sticker-float {
   animation: sticker-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
 }
+
+/* ===== CustomCursor ===== */
+html.cursor-custom * {
+  cursor: none;
+}
+html.cursor-custom [data-cursor="native"],
+html.cursor-custom [data-cursor="native"] *,
+html.cursor-custom input,
+html.cursor-custom textarea,
+html.cursor-custom select {
+  cursor: revert;
+}
+
+.cursor-layer {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cursor-layer[data-visible="true"] {
+  opacity: 1;
+}
+.cursor-layer[data-variant="native"] {
+  opacity: 0;
+}
+.cursor-blend {
+  mix-blend-mode: difference;
+}
+.cursor-pos {
+  position: absolute;
+  left: 0;
+  top: 0;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 9999px;
+  background: #fff;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cursor-ring {
+  --s: 1;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  border: 1.5px solid #fff;
+  border-radius: 9999px;
+  transform: scale(var(--s));
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cursor-disc {
+  --s: 0.3;
+  width: 96px;
+  height: 96px;
+  margin: -48px 0 0 -48px;
+  border-radius: 9999px;
+  background: #e8001d;
+  opacity: 0;
+  transform: scale(var(--s));
+  transition:
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.cursor-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  transform: translate(-50%, -50%) scale(0.7);
+  opacity: 0;
+  color: #fff;
+  font-family: "Plus Jakarta Sans Variable", system-ui, sans-serif;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cursor-layer[data-variant="link"] .cursor-ring {
+  --s: 1.6;
+}
+.cursor-layer[data-variant="link"] .cursor-dot {
+  transform: scale(0.6);
+}
+.cursor-layer[data-variant="view"] .cursor-dot,
+.cursor-layer[data-variant="drag"] .cursor-dot {
+  transform: scale(0);
+}
+.cursor-layer[data-variant="view"] .cursor-ring,
+.cursor-layer[data-variant="drag"] .cursor-ring {
+  opacity: 0;
+}
+.cursor-layer[data-variant="view"] .cursor-disc,
+.cursor-layer[data-variant="drag"] .cursor-disc {
+  --s: 1;
+  opacity: 1;
+}
+.cursor-layer[data-variant="drag"] .cursor-disc {
+  background: #2b50ff;
+}
+.cursor-layer[data-variant="view"] .cursor-label--view,
+.cursor-layer[data-variant="drag"] .cursor-label--drag {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+.cursor-layer[data-pressed="true"] .cursor-ring {
+  transform: scale(calc(var(--s) * 0.85));
+}
+.cursor-layer[data-pressed="true"] .cursor-disc {
+  transform: scale(calc(var(--s) * 0.9));
+}

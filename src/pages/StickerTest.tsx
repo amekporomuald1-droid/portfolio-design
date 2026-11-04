@@ -21,7 +21,7 @@ export default function StickerTest() {
 
   return (
     <main>
-      <section className="relative flex min-h-screen items-center overflow-hidden px-6 md:px-16">
+      <section data-cursor="native" className="relative flex min-h-screen items-center overflow-hidden px-6 md:px-16">
         <div className="relative z-10">
           <Label>Test StickerField · mode : {mode}</Label>
           <Heading as="h1" size="xl" className="mt-6 max-w-5xl">
