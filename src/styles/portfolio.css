@@ -42,3 +42,21 @@
     scroll-behavior: auto !important;
   }
 }
+
+@layer components {
+  .sticker-outline * {
+    fill: #fff !important;
+    stroke: #fff !important;
+    stroke-width: 10px !important;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+}
+
+@keyframes sticker-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(0, calc(var(--float-amp, 10px) * -1), 0) rotate(var(--float-rot, 4deg)); }
+}
+.sticker-float {
+  animation: sticker-float var(--float-dur, 6s) ease-in-out var(--float-delay, 0s) infinite;
+}
