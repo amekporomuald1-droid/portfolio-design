@@ -9,8 +9,14 @@ export const SITE = {
   city: "Lomé",
   country: "Togo",
   year: 2026,
+  discipline: "Communication & Design",
+  headline: {
+    a: "Communication visuelle",
+    b: "& design",
+    accent: "graphique",
+  },
   whatsappHref: `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(
-    "Bonjour, j’ai vu votre portfolio et je souhaite échanger.",
+    "Bonjour, j'ai vu votre portfolio et je souhaite échanger.",
   )}`,
   // TODO : adresse e-mail, compte Instagram, texte « À propos ».
 } as const;
@@ -64,11 +70,11 @@ export const WORKS: readonly Work[] = [
   },
   {
     slug: "bluwa-telecharge-app",
-    title: "Télécharge l’app",
+    title: "Télécharge l'app",
     client: "Bluwa",
     category: "Communication",
     image: "/images/travaux/bluwa-telecharge-app.png",
-    alt: "Visuel Bluwa : icône de l’application sur un écran de téléphone",
+    alt: "Visuel Bluwa : icône de l'application sur un écran de téléphone",
     bg: BLUWA_BG,
     tone: "dark",
   },
@@ -109,7 +115,7 @@ export const WORKS: readonly Work[] = [
     client: "Ed Event",
     category: "Événementiel",
     image: "/images/travaux/ed-event-game-night.png",
-    alt: "Affiche de la Game Night Ed Event : un pion d’échecs, des dés et des cartes",
+    alt: "Affiche de la Game Night Ed Event : un pion d'échecs, des dés et des cartes",
     bg: "#0d0d0d",
     tone: "dark",
   },
@@ -129,7 +135,7 @@ export const WORKS: readonly Work[] = [
     client: "Bluwa",
     category: "Print",
     image: "/images/travaux/bluwa-flyer-verso.png",
-    alt: "Flyer Bluwa Commerce : offres POS et distribution avec les packs d’abonnement",
+    alt: "Flyer Bluwa Commerce : offres POS et distribution avec les packs d'abonnement",
     bg: BLUWA_BG,
     tone: "dark",
   },

@@ -1,67 +1,59 @@
-import { useCallback, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import FullscreenMenu from "@/components/layout/FullscreenMenu";
-import Logo from "@/components/ui/Logo";
-import { NAV_LINKS, SITE } from "@/data/portfolio";
+import { ArrowUpRight } from "lucide-react";
+import { SITE, WORKS } from "@/data/portfolio";
 import { EASE_EXPO } from "@/lib/motion";
 
-export default function Header({ ready }: { ready: boolean }) {
-  const [open, setOpen] = useState(false);
-  const menuButtonRef = useRef<HTMLButtonElement>(null);
-
-  const close = useCallback(() => {
-    setOpen(false);
-    menuButtonRef.current?.focus();
-  }, []);
-
+export default function Header({ onOpenIndex }: { onOpenIndex: () => void }) {
   return (
     <>
       <motion.header
-        initial={{ opacity: 0, y: -16 }}
-        animate={ready ? { opacity: 1, y: 0 } : { opacity: 0, y: -16 }}
-        transition={{ duration: 0.9, ease: EASE_EXPO, delay: 0.3 }}
-        className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 md:px-16"
+        initial={{ opacity: 0, y: -12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: EASE_EXPO, delay: 0.08 }}
+        className="fixed inset-x-0 top-0 z-50 flex h-[72px] items-center justify-between px-6 md:h-[80px] md:px-16"
+        style={{ color: "var(--fg)", transition: "color 0.7s cubic-bezier(0.16, 1, 0.3, 1)" }}
       >
-        <Link to="/" aria-label="AURA Holding, accueil">
-          <Logo />
-        </Link>
-
-        <nav
-          aria-label="Navigation principale"
-          className="hidden items-center gap-1 border border-aura-red bg-aura-ink p-1.5 md:flex"
+        <a
+          href="#"
+          className="group relative inline-flex items-baseline gap-1 font-display text-[22px] font-extrabold tracking-[-0.04em]"
+          aria-label={`${SITE.name}, retour au début`}
         >
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors duration-300 hover:text-aura-yellow"
-            >
-              {link.label}
-            </a>
-          ))}
+          AURA
+          <span
+            className="h-[6px] w-[6px] bg-aura-red"
+            aria-hidden="true"
+          />
+          {/* Remplacer par le logo SVG officiel quand disponible */}
+        </a>
+
+        <div className="flex items-center gap-7 md:gap-7">
+          <button
+            type="button"
+            onClick={onOpenIndex}
+            className="group relative inline-flex items-center gap-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 hover:after:scale-x-100 focus-visible:after:scale-x-100"
+          >
+            Index
+            <sup className="text-[9px] opacity-60">{WORKS.length}</sup>
+          </button>
           <a
-            href={SITE.whatsappPartnerHref}
+            href={SITE.whatsappHref}
             target="_blank"
             rel="noopener noreferrer"
-            className="ml-1 bg-aura-red px-4 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-white transition-colors duration-500 hover:bg-white hover:text-aura-ink"
+            className="group relative inline-flex items-center gap-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 hover:after:scale-x-100 focus-visible:after:scale-x-100"
           >
-            Devenir partenaire
+            Contact
+            <ArrowUpRight className="h-3 w-3" strokeWidth={2.5} />
           </a>
-        </nav>
-
-        <button
-          ref={menuButtonRef}
-          type="button"
-          onClick={() => setOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={open}
-          className="border border-aura-red bg-aura-ink px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white md:hidden"
-        >
-          Menu
-        </button>
+        </div>
       </motion.header>
-      <FullscreenMenu open={open} onClose={close} />
+
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 0.15 }}
+        transition={{ duration: 0.5, ease: EASE_EXPO, delay: 0.08 }}
+        className="fixed inset-x-0 top-[72px] z-40 h-px bg-current opacity-15 md:top-[80px]"
+        style={{ margin: "0 1.5rem" }}
+      />
     </>
   );
 }
