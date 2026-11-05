@@ -34,4 +34,6 @@ export interface Work {
   video?: WorkVideo;
   links?: WorkLink[];
   description?: string;
+  /** Couleur d'accent pour le cadre "à la une" (optionnel) */
+  accent?: string;
 }

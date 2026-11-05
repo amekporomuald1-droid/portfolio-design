@@ -1,15 +1,17 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { isCursorVariant, useCursor, type CursorVariant } from "@/context/CursorContext";
 import { useReducedMotion } from "@/hooks/useReducedMotion";
 
 const INTERACTIVE = "a, button, [role='button'], summary, label";
 const TEXT_FIELDS = "input, textarea, select, [contenteditable='true']";
+const NO_CURSOR = "[data-no-cursor]";
 
 /** Détermine la variante selon l'élément survolé (l'ancêtre le plus proche gagne). */
 function resolveVariant(target: EventTarget | null): CursorVariant {
   if (!(target instanceof Element)) return "default";
-  const el = target.closest<HTMLElement>(`[data-cursor], ${INTERACTIVE}, ${TEXT_FIELDS}`);
+  const el = target.closest<HTMLElement>(`[data-cursor], ${INTERACTIVE}, ${TEXT_FIELDS}, ${NO_CURSOR}`);
   if (!el) return "default";
+  if (el.matches(NO_CURSOR)) return "native";
   const declared = el.dataset.cursor;
   if (isCursorVariant(declared)) return declared;
   if (el.matches(TEXT_FIELDS)) return "native";
@@ -18,19 +20,22 @@ function resolveVariant(target: EventTarget | null): CursorVariant {
 }
 
 /**
- * Curseur du site (hors hero) : point instantané + anneau avec inertie.
- * Deux couches : l'une en mix-blend-mode "difference" (point + anneau, lisibles sur fond clair
- * et sombre), l'autre normale (disque VOIR / DRAG). Animation : transform et opacity uniquement.
+ * Curseur du site : point instantané + pastille avec inertie.
+ * Variante "service" : affiche le texte du service depuis data-cursor-label.
+ * Variante "link" : pastille avec ↗.
+ * Hors zone interactive : pastille 12px sans texte.
  */
 export default function CustomCursor() {
   const { enabled, variant, setVariant } = useCursor();
   const reduced = useReducedMotion();
+  const [serviceLabel, setServiceLabel] = useState("");
 
   const layerARef = useRef<HTMLDivElement>(null);
   const layerBRef = useRef<HTMLDivElement>(null);
   const dotRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
   const discRef = useRef<HTMLDivElement>(null);
+  const labelRef = useRef<HTMLSpanElement>(null);
 
   useEffect(() => {
     if (!enabled) return;
@@ -39,7 +44,8 @@ export default function CustomCursor() {
     const dot = dotRef.current;
     const ring = ringRef.current;
     const disc = discRef.current;
-    if (!layerA || !layerB || !dot || !ring || !disc) return;
+    const label = labelRef.current;
+    if (!layerA || !layerB || !dot || !ring || !disc || !label) return;
 
     const html = document.documentElement;
     html.classList.add("cursor-custom");
@@ -69,7 +75,7 @@ export default function CustomCursor() {
     const frame = (now: number) => {
       const dt = Math.min(Math.max((now - last) / 16.667, 0.2), 3);
       last = now;
-      const k = reduced ? 1 : 1 - Math.pow(1 - 0.16, dt);
+      const k = reduced ? 1 : 1 - Math.pow(1 - 0.18, dt);
       lag.x += (mouse.x - lag.x) * k;
       lag.y += (mouse.y - lag.y) * k;
 
@@ -80,6 +86,7 @@ export default function CustomCursor() {
       }
       place(ring, lag.x, lag.y);
       place(disc, lag.x, lag.y);
+      place(label, lag.x, lag.y);
       raf = busy ? requestAnimationFrame(frame) : 0;
     };
 
@@ -103,7 +110,15 @@ export default function CustomCursor() {
 
     const onOver = (e: PointerEvent) => {
       if (e.pointerType === "touch") return;
-      setVariant(resolveVariant(e.target));
+      const el = e.target as Element;
+      const newVariant = resolveVariant(e.target);
+      setVariant(newVariant);
+      if (newVariant === "service") {
+        const serviceEl = el.closest<HTMLElement>("[data-cursor-label]");
+        setServiceLabel(serviceEl?.dataset.cursorLabel || "");
+      } else {
+        setServiceLabel("");
+      }
     };
 
     const onDown = (e: PointerEvent) => {
@@ -148,9 +163,12 @@ export default function CustomCursor() {
       <div ref={layerBRef} aria-hidden="true" data-variant={variant} className="cursor-layer">
         <div ref={discRef} className="cursor-pos">
           <div className="cursor-disc" />
+        </div>
+        <div ref={labelRef} className="cursor-pos">
           <span className="cursor-label cursor-label--view">Voir</span>
           <span className="cursor-label cursor-label--play">Lire</span>
-          <span className="cursor-label cursor-label--drag">Drag</span>
+          <span className="cursor-label cursor-label--service">{serviceLabel}</span>
+          <span className="cursor-label cursor-label--link">↗</span>
         </div>
       </div>
     </>

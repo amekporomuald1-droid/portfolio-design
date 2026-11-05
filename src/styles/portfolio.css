@@ -11,13 +11,9 @@
   :root {
     --accent: #6f001a;
   }
-  html[data-tone="dark"] {
-    --accent: #c4a24b;
-  }
   html {
-    scroll-snap-type: y mandatory;
-    background: #f6f4f0;
-    color: #0d1117;
+    background: #ebebeb;
+    color: #0a0a0a;
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
@@ -32,23 +28,22 @@
     @apply font-sans;
     margin: 0;
     min-height: 100vh;
-    background-color: var(--bg, #f6f4f0);
-    color: var(--fg, #0d1117);
-    transition: background-color 0.7s cubic-bezier(0.16, 1, 0.3, 1), color 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+    background-color: #ebebeb;
+    color: #0a0a0a;
     overflow-x: clip;
   }
   h1, h2, h3 {
     @apply font-display;
     font-weight: 800;
     letter-spacing: -0.035em;
-    line-height: 0.98;
+    line-height: 0.92;
   }
   :focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
   ::selection {
-    background: #2b50ff;
+    background: #6f001a;
     color: #fff;
   }
 }
@@ -59,9 +54,6 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
-  }
-  html {
-    scroll-snap-type: y proximity;
   }
   body {
     transition: none;
@@ -97,9 +89,6 @@ html.cursor-custom select {
 .cursor-layer[data-variant="native"] {
   opacity: 0;
 }
-.cursor-blend {
-  mix-blend-mode: difference;
-}
 .cursor-pos {
   position: absolute;
   left: 0;
@@ -107,20 +96,20 @@ html.cursor-custom select {
   will-change: transform;
 }
 .cursor-dot {
-  width: 6px;
-  height: 6px;
-  margin: -3px 0 0 -3px;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
   border-radius: 9999px;
-  background: #fff;
+  background: #0a0a0a;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .cursor-ring {
   --s: 1;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border: 1.5px solid #fff;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
   border-radius: 9999px;
+  background: var(--accent);
   transform: scale(var(--s));
   transition:
     transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
@@ -128,9 +117,9 @@ html.cursor-custom select {
 }
 .cursor-disc {
   --s: 0.3;
-  width: 96px;
-  height: 96px;
-  margin: -48px 0 0 -48px;
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
   border-radius: 9999px;
   background: var(--accent);
   opacity: 0;
@@ -158,41 +147,36 @@ html.cursor-custom select {
 }
 
 .cursor-layer[data-variant="link"] .cursor-ring {
-  --s: 1.6;
+  --s: 1.5;
 }
 .cursor-layer[data-variant="link"] .cursor-dot {
-  transform: scale(0.6);
+  transform: scale(0);
+}
+.cursor-layer[data-variant="link"] .cursor-label--link {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
 }
 .cursor-layer[data-variant="view"] .cursor-dot,
 .cursor-layer[data-variant="play"] .cursor-dot,
-.cursor-layer[data-variant="drag"] .cursor-dot {
+.cursor-layer[data-variant="service"] .cursor-dot {
   transform: scale(0);
 }
 .cursor-layer[data-variant="view"] .cursor-ring,
 .cursor-layer[data-variant="play"] .cursor-ring,
-.cursor-layer[data-variant="drag"] .cursor-ring {
+.cursor-layer[data-variant="service"] .cursor-ring {
   opacity: 0;
 }
 .cursor-layer[data-variant="view"] .cursor-disc,
 .cursor-layer[data-variant="play"] .cursor-disc,
-.cursor-layer[data-variant="drag"] .cursor-disc {
+.cursor-layer[data-variant="service"] .cursor-disc {
   --s: 1;
   opacity: 1;
 }
-.cursor-layer[data-variant="drag"] .cursor-disc {
-  background: #2b50ff;
-}
 .cursor-layer[data-variant="view"] .cursor-label--view,
 .cursor-layer[data-variant="play"] .cursor-label--play,
-.cursor-layer[data-variant="drag"] .cursor-label--drag {
+.cursor-layer[data-variant="service"] .cursor-label--service {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
-}
-html[data-tone="light"] .cursor-layer[data-variant="play"] .cursor-label--play {
-  color: #fff;
-}
-html[data-tone="dark"] .cursor-layer[data-variant="play"] .cursor-label--play {
-  color: #000;
 }
 .cursor-layer[data-pressed="true"] .cursor-ring {
   transform: scale(calc(var(--s) * 0.85));
@@ -201,10 +185,15 @@ html[data-tone="dark"] .cursor-layer[data-variant="play"] .cursor-label--play {
   transform: scale(calc(var(--s) * 0.9));
 }
 
-@keyframes scroll-cue {
-  0% { transform: translateY(-100%); }
-  60%, 100% { transform: translateY(100%); }
+@keyframes marquee {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
-.scroll-cue {
-  animation: scroll-cue 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+.animate-marquee {
+  animation: marquee 30s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee {
+    animation: none;
+  }
 }

@@ -4,20 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        aura: {
+        brand: {
+          bg: "#ebebeb",
           ink: "#0a0a0a",
-          paper: "#f6f4f0",
-          wine: "#6f001a",
+          burgundy: "#6f001a",
           gold: "#c4a24b",
-          goldDeep: "#aa8326",
-          goldLight: "#f5eca9",
-          // Conservés pour compatibilité (seront remplacés par accent)
-          bg: "#f6f4f0",
-          red: "#e8001d",
-          yellow: "#ffd60a",
-          blue: "#2b50ff",
-          green: "#25d366",
-          pink: "#ff7ab8",
+          dock: "#222",
+          field: "#e2e2e2",
         },
       },
       fontFamily: {
