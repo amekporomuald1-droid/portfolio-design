@@ -8,6 +8,12 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --accent: #6f001a;
+  }
+  html[data-tone="dark"] {
+    --accent: #c4a24b;
+  }
   html {
     scroll-snap-type: y mandatory;
     background: #f6f4f0;
@@ -15,6 +21,12 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
+  }
+  html:not(.fonts-ready) #root {
+    opacity: 0;
+  }
+  #root {
+    transition: opacity 0.6s;
   }
   body {
     @apply font-sans;
@@ -28,10 +40,11 @@
   h1, h2, h3 {
     @apply font-display;
     font-weight: 800;
-    letter-spacing: -0.04em;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
   }
   :focus-visible {
-    outline: 2px solid #e8001d;
+    outline: 2px solid var(--accent);
     outline-offset: 3px;
   }
   ::selection {
@@ -119,7 +132,7 @@ html.cursor-custom select {
   height: 96px;
   margin: -48px 0 0 -48px;
   border-radius: 9999px;
-  background: #e8001d;
+  background: var(--accent);
   opacity: 0;
   transform: scale(var(--s));
   transition:
@@ -133,7 +146,7 @@ html.cursor-custom select {
   transform: translate(-50%, -50%) scale(0.6);
   opacity: 0;
   color: #fff;
-  font-family: "Plus Jakarta Sans Variable", system-ui, sans-serif;
+  font-family: "Inter Variable", system-ui, sans-serif;
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.18em;
@@ -151,14 +164,17 @@ html.cursor-custom select {
   transform: scale(0.6);
 }
 .cursor-layer[data-variant="view"] .cursor-dot,
+.cursor-layer[data-variant="play"] .cursor-dot,
 .cursor-layer[data-variant="drag"] .cursor-dot {
   transform: scale(0);
 }
 .cursor-layer[data-variant="view"] .cursor-ring,
+.cursor-layer[data-variant="play"] .cursor-ring,
 .cursor-layer[data-variant="drag"] .cursor-ring {
   opacity: 0;
 }
 .cursor-layer[data-variant="view"] .cursor-disc,
+.cursor-layer[data-variant="play"] .cursor-disc,
 .cursor-layer[data-variant="drag"] .cursor-disc {
   --s: 1;
   opacity: 1;
@@ -167,9 +183,16 @@ html.cursor-custom select {
   background: #2b50ff;
 }
 .cursor-layer[data-variant="view"] .cursor-label--view,
+.cursor-layer[data-variant="play"] .cursor-label--play,
 .cursor-layer[data-variant="drag"] .cursor-label--drag {
   opacity: 1;
   transform: translate(-50%, -50%) scale(1);
+}
+html[data-tone="light"] .cursor-layer[data-variant="play"] .cursor-label--play {
+  color: #fff;
+}
+html[data-tone="dark"] .cursor-layer[data-variant="play"] .cursor-label--play {
+  color: #000;
 }
 .cursor-layer[data-pressed="true"] .cursor-ring {
   transform: scale(calc(var(--s) * 0.85));

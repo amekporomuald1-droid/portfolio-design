@@ -3,14 +3,15 @@ import { usePointerFine } from "@/hooks/usePointerFine";
 
 /**
  * Variantes du curseur, pilotées par l'attribut HTML `data-cursor` :
- *  - "view"   : disque rouge « VOIR » (cartes projet)
- *  - "drag"   : disque bleu « DRAG » (carrousels)
+ *  - "view"   : disque « VOIR » (cartes projet)
+ *  - "play"   : disque « LIRE » (vidéos)
+ *  - "drag"   : disque « DRAG » (carrousels)
  *  - "native" : curseur système (hero, où les stickers suivent le pointeur)
  *  - "link"   : anneau agrandi (automatique sur liens et boutons)
  */
-export type CursorVariant = "default" | "link" | "view" | "drag" | "native";
+export type CursorVariant = "default" | "link" | "view" | "play" | "drag" | "native";
 
-const VARIANTS: readonly string[] = ["default", "link", "view", "drag", "native"];
+const VARIANTS: readonly string[] = ["default", "link", "view", "play", "drag", "native"];
 
 export function isCursorVariant(value: unknown): value is CursorVariant {
   return typeof value === "string" && VARIANTS.includes(value);

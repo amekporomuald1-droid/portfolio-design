@@ -149,6 +149,7 @@ export default function CustomCursor() {
         <div ref={discRef} className="cursor-pos">
           <div className="cursor-disc" />
           <span className="cursor-label cursor-label--view">Voir</span>
+          <span className="cursor-label cursor-label--play">Lire</span>
           <span className="cursor-label cursor-label--drag">Drag</span>
         </div>
       </div>

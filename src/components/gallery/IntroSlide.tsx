@@ -14,7 +14,7 @@ export default function IntroSlide() {
   };
 
   return (
-    <section className="flex h-[100svh] flex-col justify-between px-6 py-32 md:px-16">
+    <section className="flex h-[100dvh] flex-col justify-between px-6 py-32 md:px-16">
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
@@ -26,7 +26,7 @@ export default function IntroSlide() {
       </motion.div>
 
       <div className="mt-8">
-        <h1 className="font-display text-[clamp(2.75rem,8vw,8rem)] font-extrabold leading-[0.92] tracking-[-0.04em] max-w-[100%] overflow-wrap-anywhere">
+        <h1 className="font-display text-[clamp(2.75rem,8vw,8rem)] font-extrabold leading-[0.98] tracking-[-0.035em] max-w-[100%] overflow-wrap-anywhere">
           <div className="overflow-hidden">
             <motion.span
               className="block"
@@ -44,10 +44,15 @@ export default function IntroSlide() {
               animate={{ y: "0%" }}
               transition={{ duration: 0.9, ease: EASE_EXPO, delay: 0.16 }}
             >
-              {SITE.headline.b} <em className="font-serif font-normal italic text-aura-red">{SITE.headline.accent}</em>
+              {SITE.headline.b} <em className="font-serif font-normal italic" style={{ color: "var(--accent)" }}>{SITE.headline.accent}</em>
             </motion.span>
           </div>
         </h1>
+      </div>
+
+      {/* Annonce du slide actif pour accessibilité */}
+      <div aria-live="polite" aria-atomic="true" className="sr-only">
+        Introduction du portfolio AURA Holding
       </div>
 
       <motion.div

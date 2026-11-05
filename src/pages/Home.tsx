@@ -1,16 +1,10 @@
-import { useCallback, useState } from "react";
+import { useState, useRef } from "react";
 import Header from "@/components/layout/Header";
 import Gallery from "@/components/gallery/Gallery";
 
 export default function Home() {
   const [indexOpen, setIndexOpen] = useState(false);
-
-  const scrollToIndex = useCallback((index: number) => {
-    const el = document.querySelector(`[data-slide-index="${index}"]`);
-    if (el) {
-      el.scrollIntoView({ behavior: "smooth" });
-    }
-  }, []);
+  const galleryRef = useRef<{ scrollToContact: () => void }>(null);
 
   return (
     <>
@@ -20,12 +14,15 @@ export default function Home() {
       >
         Aller au contenu
       </a>
-      <Header onOpenIndex={() => setIndexOpen(true)} />
+      <Header
+        onOpenIndex={() => setIndexOpen(true)}
+        scrollToContact={() => galleryRef.current?.scrollToContact()}
+      />
       <main id="contenu">
         <Gallery
+          ref={galleryRef}
           indexOpen={indexOpen}
           setIndexOpen={setIndexOpen}
-          scrollToIndex={scrollToIndex}
         />
       </main>
     </>

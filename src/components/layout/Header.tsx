@@ -3,7 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { SITE, WORKS } from "@/data/portfolio";
 import { EASE_EXPO } from "@/lib/motion";
 
-export default function Header({ onOpenIndex }: { onOpenIndex: () => void }) {
+export default function Header({ onOpenIndex, scrollToContact }: { onOpenIndex: () => void; scrollToContact: () => void }) {
   return (
     <>
       <motion.header
@@ -15,15 +15,26 @@ export default function Header({ onOpenIndex }: { onOpenIndex: () => void }) {
       >
         <a
           href="#"
-          className="group relative inline-flex items-baseline gap-1 font-display text-[22px] font-extrabold tracking-[-0.04em]"
+          className="relative inline-flex items-center"
           aria-label={`${SITE.name}, retour au début`}
         >
-          AURA
-          <span
-            className="h-[6px] w-[6px] bg-aura-red"
+          {/* Logo bordeaux (visible sur fond clair) */}
+          <img
+            src="/brand/logo-icone-bordeaux.png"
+            alt=""
+            className="absolute inset-0 h-[36px] w-[36px] md:h-[40px] md:w-[40px] object-contain transition-opacity duration-400 data-[tone='dark']:opacity-0"
+            data-tone="light"
             aria-hidden="true"
           />
-          {/* Remplacer par le logo SVG officiel quand disponible */}
+          {/* Logo blanc (visible sur fond sombre) */}
+          <img
+            src="/brand/logo-icone-blanc.png"
+            alt=""
+            className="h-[36px] w-[36px] md:h-[40px] md:w-[40px] object-contain transition-opacity duration-400 opacity-0 data-[tone='dark']:opacity-100"
+            data-tone="dark"
+            aria-hidden="true"
+          />
+          <span className="sr-only">{SITE.name}</span>
         </a>
 
         <div className="flex items-center gap-7 md:gap-7">
@@ -35,15 +46,14 @@ export default function Header({ onOpenIndex }: { onOpenIndex: () => void }) {
             Index
             <sup className="text-[9px] opacity-60">{WORKS.length}</sup>
           </button>
-          <a
-            href={SITE.whatsappHref}
-            target="_blank"
-            rel="noopener noreferrer"
+          <button
+            type="button"
+            onClick={scrollToContact}
             className="group relative inline-flex items-center gap-1.5 py-2 text-[11px] font-semibold uppercase tracking-[0.2em] after:absolute after:inset-x-0 after:bottom-0 after:h-px after:origin-left after:scale-x-0 after:bg-current after:transition-transform after:duration-500 hover:after:scale-x-100 focus-visible:after:scale-x-100"
           >
             Contact
             <ArrowUpRight className="h-3 w-3" strokeWidth={2.5} />
-          </a>
+          </button>
         </div>
       </motion.header>
 

@@ -5,10 +5,15 @@ export default {
     extend: {
       colors: {
         aura: {
-          bg: "#f6f4f0",
-          ink: "#0d1117",
-          red: "#e8001d",
+          ink: "#0a0a0a",
+          paper: "#f6f4f0",
           wine: "#6f001a",
+          gold: "#c4a24b",
+          goldDeep: "#aa8326",
+          goldLight: "#f5eca9",
+          // Conservés pour compatibilité (seront remplacés par accent)
+          bg: "#f6f4f0",
+          red: "#e8001d",
           yellow: "#ffd60a",
           blue: "#2b50ff",
           green: "#25d366",
@@ -16,7 +21,7 @@ export default {
         },
       },
       fontFamily: {
-        display: ['"Plus Jakarta Sans Variable"', "system-ui", "sans-serif"],
+        display: ['"Inter Variable"', "system-ui", "sans-serif"],
         serif: ['"Instrument Serif"', "Georgia", "serif"],
         sans: ['"Inter Variable"', "system-ui", "sans-serif"],
       },

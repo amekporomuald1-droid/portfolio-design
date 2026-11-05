@@ -68,7 +68,8 @@ export default function IndexOverlay({ open, onClose, onSelect }: IndexOverlayPr
             <button
               type="button"
               onClick={onClose}
-              className="border border-aura-red px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white"
+              className="border px-5 py-3 text-[11px] font-semibold uppercase tracking-[0.2em] text-white"
+              style={{ borderColor: "var(--accent)" }}
             >
               Fermer
             </button>
@@ -84,7 +85,8 @@ export default function IndexOverlay({ open, onClose, onSelect }: IndexOverlayPr
                       onSelect(i);
                       onClose();
                     }}
-                    className="flex w-full items-baseline gap-4 text-left transition-colors hover:text-aura-red"
+                    className="flex w-full items-baseline gap-4 text-left transition-colors hover:opacity-70"
+                    style={{ color: work.video ? "var(--accent)" : "currentColor" }}
                   >
                     <span className="text-[11px] font-semibold tracking-[0.25em] text-white/50">
                       {String(i + 1).padStart(2, "0")}
@@ -92,10 +94,48 @@ export default function IndexOverlay({ open, onClose, onSelect }: IndexOverlayPr
                     <span className="font-display text-[clamp(1.5rem,4vw,3rem)] font-extrabold leading-[1.1] tracking-[-0.04em]">
                       {work.title}
                     </span>
+                    {work.video && (
+                      <span className="ml-2 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/50">
+                        Vidéo
+                      </span>
+                    )}
                     <Label className="ml-auto">{work.client}</Label>
                   </button>
                 </li>
               ))}
+            </ul>
+
+            <div className="my-8 h-px bg-white/20" />
+
+            <ul className="m-0 list-none space-y-4 p-0">
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelect(WORKS.length);
+                    onClose();
+                  }}
+                  className="flex w-full items-baseline gap-4 text-left transition-colors hover:opacity-70"
+                >
+                  <span className="font-display text-[clamp(1.25rem,3vw,2rem)] font-extrabold leading-[1.1] tracking-[-0.04em]">
+                    À propos
+                  </span>
+                </button>
+              </li>
+              <li>
+                <button
+                  type="button"
+                  onClick={() => {
+                    onSelect(WORKS.length + 1);
+                    onClose();
+                  }}
+                  className="flex w-full items-baseline gap-4 text-left transition-colors hover:opacity-70"
+                >
+                  <span className="font-display text-[clamp(1.25rem,3vw,2rem)] font-extrabold leading-[1.1] tracking-[-0.04em]">
+                    Contact
+                  </span>
+                </button>
+              </li>
             </ul>
           </nav>
 

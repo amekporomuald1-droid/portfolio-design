@@ -1,7 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { WORKS } from "@/data/portfolio";
 import { EASE_EXPO } from "@/lib/motion";
+import { parseYouTubeId, youtubeEmbedUrl } from "@/lib/media";
 
 interface LightboxProps {
   open: boolean;
@@ -16,11 +17,17 @@ export default function Lightbox({ open, index, onClose, onNext, onPrev }: Light
   const nextRef = useRef<HTMLButtonElement>(null);
   const prevRef = useRef<HTMLButtonElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const [videoReady, setVideoReady] = useState(false);
 
   const work = WORKS[index];
+  const isVideo = !!work.video;
+  const youtubeId = isVideo ? parseYouTubeId(work.video!.url) : null;
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      setVideoReady(false);
+      return;
+    }
     const root = document.documentElement;
     const prevOverflow = root.style.overflow;
     root.style.overflow = "hidden";
@@ -62,6 +69,14 @@ export default function Lightbox({ open, index, onClose, onNext, onPrev }: Light
       root.style.overflow = prevOverflow;
     };
   }, [open, onClose, onNext, onPrev]);
+
+  useEffect(() => {
+    if (open && isVideo && youtubeId) {
+      // Small delay to ensure iframe is mounted before setting ready
+      const timer = setTimeout(() => setVideoReady(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [open, isVideo, youtubeId]);
 
   return (
     <AnimatePresence>
@@ -113,12 +128,54 @@ export default function Lightbox({ open, index, onClose, onNext, onPrev }: Light
           </button>
 
           <div className="max-h-[90vh] max-w-[90vw]">
-            <img src={work.image} alt={work.alt} className="max-h-[90vh] max-w-[90vw] object-contain" />
+            {isVideo && youtubeId ? (
+              <>
+                {!videoReady && (
+                  <div className="relative flex items-center justify-center">
+                    <img
+                      src={work.video?.poster || work.image}
+                      alt={work.alt ?? `${work.title}, ${work.category}`}
+                      className="max-h-[90vh] max-w-[90vw] object-contain"
+                    />
+                    <div className="absolute inset-0 flex items-center justify-center bg-black/40">
+                      <div className="h-12 w-12 animate-spin rounded-full border-4 border-white/30 border-t-white" />
+                    </div>
+                  </div>
+                )}
+                {videoReady && (
+                  <iframe
+                    src={youtubeEmbedUrl(youtubeId, { autoplay: true, start: work.video?.start })}
+                    title={work.title}
+                    className="max-h-[90vh] max-w-[90vw]"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                )}
+              </>
+            ) : (
+              <img src={work.image} alt={work.alt ?? `${work.title}, ${work.category}`} className="max-h-[90vh] max-w-[90vw] object-contain" />
+            )}
           </div>
 
-          <div className="absolute bottom-6 left-6 text-white/60 md:bottom-16 md:left-16">
+          <div className="absolute bottom-6 left-6 text-white/60 md:bottom-16 md:left-16 max-w-[calc(100%-12rem)]">
             <p className="text-sm font-semibold">{work.title}</p>
-            <p className="text-xs">{work.client}</p>
+            <p className="text-xs mb-2">{work.client}</p>
+            {work.links && work.links.length > 0 && (
+              <div className="flex flex-wrap gap-3">
+                {work.links.map((link, i) => (
+                  <a
+                    key={i}
+                    href={link.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs font-semibold uppercase tracking-[0.15em] transition-colors hover:opacity-70"
+                    style={{ color: "var(--accent)" }}
+                  >
+                    {link.label}
+                  </a>
+                ))}
+              </div>
+            )}
           </div>
         </motion.div>
       )}
